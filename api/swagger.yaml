@@ -1,0 +1,129 @@
+openapi: 3.0.3
+info:
+  title: service-native-go-learn
+  version: 1.0.0
+tags:
+  - name: General
+    description: >
+      General API, not related to any specific entity.
+paths:
+  /v1/:
+    get:
+      tags:
+        - General
+      summary: root
+      operationId: root
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        404:
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        403:
+          description: Need authorization
+          content:
+            application/json:
+              example: { "message": "need authorization", code: 403 }
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+  /healthz:
+    get:
+      tags:
+        - General
+      summary: Health check
+      description: Health check
+      operationId: healthz
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                stage:
+                  value:
+                    {
+                      "branch": "stage",
+                      "build_date": "20221130T1437",
+                      "name": "courses-backend"
+                    }
+                production:
+                  value:
+                    {
+                      "branch": "production",
+                      "build_date": "20221130T1437",
+                      "name": "courses-backend"
+                    }
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+
+components:
+  #  securitySchemes:
+  #    bearerAuth:
+  #      type: http #allowedValues: apiKey, http, oauth2, openIdConnect
+  #      scheme: bearer
+  #      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  #      description: |
+  #        Enter the JWT token without the `Bearer: ` prefix, e.g. "abcde12345".
+  schemas:
+    SuccessResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Everything is OK
+          example: OK
+        code:
+          type: integer
+          description: status code, may be empty
+          example: 200
+    Unauthorized:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: Unauthorized
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message
+          example: user something wrong
+        code:
+          type: integer
+          description: Error code, uniq whole project
+          example: 12404
+        level:
+          type: string
+          description: who is responsible for the error
+          example: system
+    InternalServerError:
+      type: string
+      description: Error message
+      example: Internal Server Error
