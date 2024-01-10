@@ -1,15 +1,24 @@
 package main
 
-import "log/slog"
+import (
+	"log/slog"
+	"os"
+
+	"github.com/IvanKyrylov/cloud-native-go-learn/basic"
+)
 
 func main() {
-	slog.Info("Start service")
+	opts := &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	}
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, opts))
 
-	run()
+	logger.Info("Start service")
+	defer logger.Info("End service")
 
-	defer slog.Info("End service")
+	run(logger)
 }
 
-func run() {
-	// ...
+func run(logger *slog.Logger) {
+	basic.Run(logger)
 }
