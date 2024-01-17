@@ -5,20 +5,23 @@ import (
 	"os"
 
 	"github.com/IvanKyrylov/cloud-native-go-learn/basic"
+	customLogger "github.com/IvanKyrylov/cloud-native-go-learn/pkg/logger"
+	"github.com/IvanKyrylov/cloud-native-go-learn/pkg/runner"
 )
 
 func main() {
-	opts := &slog.HandlerOptions{
-		Level: slog.LevelDebug,
-	}
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, opts))
+	logger := customLogger.NewSlog(os.Getenv("LOG_LVL"))
 
-	logger.Info("Start service")
-	defer logger.Info("End service")
+	logger.Info("Start app")
+	defer logger.Info("End app")
 
-	run(logger)
+	basicService := basic.New(logger.With(slog.Group("service", slog.String("name", "basic"))))
+
+	run(basicService)
 }
 
-func run(logger *slog.Logger) {
-	basic.Run(logger)
+func run(services ...runner.Runner) {
+	for _, service := range services {
+		service.Run()
+	}
 }

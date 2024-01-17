@@ -1,9 +1,6 @@
 package basic
 
-import (
-	"fmt"
-	"log/slog"
-)
+import "fmt"
 
 func sumInts(m map[string]int64) int64 {
 	var s int64
@@ -47,10 +44,7 @@ func sumNumbers[K comparable, V number](m map[K]V) V {
 	return s
 }
 
-func runGeneric(logger *slog.Logger) {
-	logger.Debug("Start generic")
-	defer logger.Debug("End generic")
-
+func generic() {
 	ints := map[string]int64{
 		"first":  34,
 		"second": 12,
