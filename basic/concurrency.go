@@ -49,15 +49,15 @@ func channels() {
 	// msg, ok = <-ch
 	// fmt.Printf("%q, %v\n", msg, ok)
 
-	ch := make(chan string, 3)
-	ch <- "foo"
-	ch <- "bar"
-	ch <- "baz"
-	close(ch)
-
-	for s := range ch {
-		fmt.Println(s)
-	}
+	// ch := make(chan string, 3)
+	// ch <- "foo"
+	// ch <- "bar"
+	// ch <- "baz"
+	// close(ch)
+	//
+	// for s := range ch {
+	// 	fmt.Println(s)
+	// }
 }
 
 func selectControl() {
